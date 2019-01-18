@@ -32,7 +32,7 @@ var server = http.createServer(function (req, res) {
             res.writeHead(200, { 'content-type': 'text/plain' });
             res.write('received upload:\n\n');
             // TODO: replace space to -
-            var file = path.join(path.resolve(__dirname, rootDir), req.url.replace(root, ""), fields["path"], fields["title"] + ".md");
+            var file = path.join(path.resolve(__dirname, rootDir), req.url.replace(root, ""), fields["path"], fields["title"].replace(/\s+/g, "-") + ".md");
             fs.writeFile(file, fields["content"], {
                 "encoding": "utf8"
             }, function (err) {
