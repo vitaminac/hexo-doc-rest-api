@@ -8,6 +8,7 @@ var httpProxy = require('http-proxy');
 // configuration
 const root = "/doc";
 const rootDir = "../hexo-theme-doc-site/source/"
+const target = 'http://0.0.0.0:5000/'
 
 var options = {};
 
@@ -24,7 +25,11 @@ function checkRESTApiRequest(res) {
 
 var server = http.createServer(function (req, res) {
     if (req.method.toUpperCase() === "GET") {
-        proxy.web(req, res, { target: 'http://0.0.0.0:5000/' });
+        if (req.url !== root && req.url !== root + "/" && path.extname(req.url) === "") {
+            req.url = req.url.replace(/\/$/, "");
+            req.url = req.url + ".html";
+        }
+        proxy.web(req, res, { target: target });
     } else if (checkRESTApiRequest(req)) {
         // parse a file upload
         var form = new formidable.IncomingForm();
